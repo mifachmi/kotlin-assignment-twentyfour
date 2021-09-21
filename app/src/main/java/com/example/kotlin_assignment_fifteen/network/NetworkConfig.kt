@@ -1,7 +1,6 @@
 package com.example.kotlin_assignment_fifteen.network
 
 import com.example.kotlin_assignment_fifteen.data.MovieResponse
-import com.example.kotlin_assignment_fifteen.data.ResultsItem
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -33,5 +32,5 @@ class NetworkConfig {
 
 interface Movies {
     @GET("movie/popular?api_key=c67f6007c9a1b07837648440ce6b1cc5&language=en-US&page=1")
-    fun getMovies(): Call<List<MovieResponse>>
+    fun getMovies(): Call<MovieResponse>
 }

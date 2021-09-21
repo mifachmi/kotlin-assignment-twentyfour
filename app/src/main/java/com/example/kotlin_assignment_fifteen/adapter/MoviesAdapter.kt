@@ -1,7 +1,10 @@
 package com.example.kotlin_assignment_fifteen.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,7 +17,7 @@ class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<Mo
         fun bind(movies: ResultsItem) {
             with(binding){
                 Glide.with(itemView.context)
-                    .load(movies.posterPath)
+                    .load("https://image.tmdb.org/t/p/w500/" + movies.posterPath)
                     .apply(RequestOptions().override(200, 200))
                     .into(ivPoster)
 
@@ -22,16 +25,20 @@ class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<Mo
                 tvGenre.text = movies.genreIds.toString()
                 tvRating.text = movies.voteAverage.toString()
                 rbMovie.rating = movies.voteAverage!!.toFloat()
+
+                itemView.setOnClickListener {
+                    Toast.makeText(itemView.context, movies.title, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapter.MovieHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val viewHolder = RowMovieItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieHolder(viewHolder)
     }
 
-    override fun onBindViewHolder(holder: MoviesAdapter.MovieHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         holder.bind(dataMovie?.get(position)!!)
     }
 

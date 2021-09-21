@@ -14,7 +14,7 @@ data class MovieResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItem?>? = null,
+	val results: List<ResultsItem>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
@@ -54,7 +54,7 @@ data class ResultsItem(
 	val popularity: Double? = null,
 
 	@field:SerializedName("vote_average")
-	val voteAverage: Int? = null,
+	val voteAverage: Double? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
