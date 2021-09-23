@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kotlin_assignment_fifteen">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlinassignmentfifteen">
+        <activity
+            android:name=".activity.DetailMovieActivity"
+            android:exported="true"
+            android:parentActivityName=".activity.MainActivity"/>
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

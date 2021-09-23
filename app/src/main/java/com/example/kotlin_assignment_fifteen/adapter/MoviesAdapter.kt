@@ -1,5 +1,6 @@
 package com.example.kotlin_assignment_fifteen.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.kotlin_assignment_fifteen.activity.DetailMovieActivity
+import com.example.kotlin_assignment_fifteen.activity.MainActivity
 import com.example.kotlin_assignment_fifteen.data.ResultsItem
 import com.example.kotlin_assignment_fifteen.databinding.RowMovieItemsBinding
 
@@ -27,7 +30,10 @@ class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<Mo
                 rbMovie.rating = movies.voteAverage!!.toFloat()
 
                 itemView.setOnClickListener {
-                    Toast.makeText(itemView.context, movies.title, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(itemView.context, movies.title, Toast.LENGTH_SHORT).show()
+                    val movieDetailIntent = Intent(itemView.context, DetailMovieActivity::class.java)
+                    movieDetailIntent.putExtra(DetailMovieActivity.EXTRA_MOVIES, movies)
+                    startActivity(itemView.context, movieDetailIntent, null)
                 }
             }
         }

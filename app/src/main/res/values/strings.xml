@@ -1,6 +1,18 @@
 <resources>
-    <string name="app_name">kotlin-assignment-fifteen</string>
+    <string name="app_name">Popular Movies</string>
     <string name="rating">Rating</string>
     <string name="genre">Genre</string>
     <string name="movie_title">Movie Title</string>
+    <string name="play">PLAY</string>
+    <string name="relase_date">Release Date</string>
+    <string name="overview_disini">Overview disini</string>
+    <string name="overview">Overview</string>
+    <string name="popularity">POPULARITY</string>
+    <string name="popularity_disini">Popularity disini</string>
+    <string name="ratingDetail">RATING</string>
+    <string name="rating_disini">Rating disini</string>
+    <string name="voted_by_viewers">VOTED BY VIEWERS</string>
+    <string name="jumlah_user_disini">Jumlah user disini</string>
+    <string name="titleDetail">Title</string>
+    <string name="title_disini">Title disini</string>
 </resources>
