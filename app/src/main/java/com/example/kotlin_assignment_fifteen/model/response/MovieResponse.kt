@@ -1,8 +1,8 @@
-package com.example.kotlin_assignment_fifteen.data
+package com.example.kotlin_assignment_fifteen.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MovieResponse(

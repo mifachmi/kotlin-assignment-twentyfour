@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlinassignmentfifteen">
         <activity
-            android:name=".activity.DetailMovieActivity"
+            android:name=".ui.detailactivity.DetailMovieActivity"
             android:exported="true"
-            android:parentActivityName=".activity.MainActivity"/>
+            android:parentActivityName=".ui.mainactivity.MainActivity"/>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.mainactivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

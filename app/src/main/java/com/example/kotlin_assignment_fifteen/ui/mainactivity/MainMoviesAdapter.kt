@@ -1,20 +1,20 @@
-package com.example.kotlin_assignment_fifteen.adapter
+package com.example.kotlin_assignment_fifteen.ui.mainactivity
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.kotlin_assignment_fifteen.activity.DetailMovieActivity
-import com.example.kotlin_assignment_fifteen.activity.MainActivity
-import com.example.kotlin_assignment_fifteen.data.ResultsItem
 import com.example.kotlin_assignment_fifteen.databinding.RowMovieItemsBinding
+import com.example.kotlin_assignment_fifteen.model.response.ResultsItem
 
-class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<MoviesAdapter.MovieHolder>() {
+class MainMoviesAdapter(private val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<MainMoviesAdapter.MovieHolder>() {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     inner class MovieHolder(private val binding: RowMovieItemsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movies: ResultsItem) {
@@ -30,10 +30,7 @@ class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<Mo
                 rbMovie.rating = movies.voteAverage!!.toFloat()
 
                 itemView.setOnClickListener {
-//                    Toast.makeText(itemView.context, movies.title, Toast.LENGTH_SHORT).show()
-                    val movieDetailIntent = Intent(itemView.context, DetailMovieActivity::class.java)
-                    movieDetailIntent.putExtra(DetailMovieActivity.EXTRA_MOVIES, movies)
-                    startActivity(itemView.context, movieDetailIntent, null)
+                    onItemClickCallback.onItemClicked(dataMovie!![bindingAdapterPosition])
                 }
             }
         }
@@ -50,5 +47,9 @@ class MoviesAdapter(val dataMovie: List<ResultsItem>?) : RecyclerView.Adapter<Mo
 
     override fun getItemCount(): Int {
         return dataMovie!!.size
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: ResultsItem)
     }
 }

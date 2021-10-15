@@ -1,21 +1,21 @@
-package com.example.kotlin_assignment_fifteen.activity
+package com.example.kotlin_assignment_fifteen.ui.mainactivity
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.kotlin_assignment_fifteen.adapter.MoviesAdapter
-import com.example.kotlin_assignment_fifteen.data.MovieResponse
-import com.example.kotlin_assignment_fifteen.data.ResultsItem
 import com.example.kotlin_assignment_fifteen.databinding.ActivityMainBinding
-import com.example.kotlin_assignment_fifteen.network.NetworkConfig
+import com.example.kotlin_assignment_fifteen.model.network.NetworkConfig
+import com.example.kotlin_assignment_fifteen.model.response.MovieResponse
+import com.example.kotlin_assignment_fifteen.model.response.ResultsItem
+import com.example.kotlin_assignment_fifteen.ui.detailactivity.DetailMovieActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityMainBinding
 
@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             .getMovies()
             .enqueue(object : Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                    Log.d("error", t.localizedMessage)
                     Toast.makeText(this@MainActivity, t.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
 
@@ -39,9 +38,23 @@ class MainActivity : AppCompatActivity() {
                     response: Response<MovieResponse>
                 ) {
                     binding.rvMovie.layoutManager = LinearLayoutManager(this@MainActivity)
-                    binding.rvMovie.adapter = MoviesAdapter(response.body()!!.results)
+                    val listMovie = MainMoviesAdapter(response.body()!!.results)
+                    binding.rvMovie.adapter = listMovie
                     binding.pbMain.visibility = View.GONE
+
+                    listMovie.setOnItemClickCallback(object : MainMoviesAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ResultsItem) {
+                            val intentToDetail = Intent(this@MainActivity, DetailMovieActivity::class.java)
+                            intentToDetail.putExtra(DetailMovieActivity.EXTRA_MOVIES, data)
+                            startActivity(intentToDetail)
+                        }
+
+                    })
                 }
             })
+    }
+
+    interface MainView {
+        fun setDataToRecycleView(dataMovie: List<MovieResponse>)
     }
 }
