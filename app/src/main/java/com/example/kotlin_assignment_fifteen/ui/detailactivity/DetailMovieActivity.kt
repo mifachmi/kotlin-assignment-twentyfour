@@ -1,22 +1,23 @@
 package com.example.kotlin_assignment_fifteen.ui.detailactivity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.kotlin_assignment_fifteen.databinding.ActivityDetailMovieBinding
-import com.example.kotlin_assignment_fifteen.model.network.NetworkConfig
+import com.example.kotlin_assignment_fifteen.model.interactor.DetailMovieInteractor
 import com.example.kotlin_assignment_fifteen.model.response.DetailMovieResponse
 import com.example.kotlin_assignment_fifteen.model.response.ResultsItem
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.kotlin_assignment_fifteen.presenter.DetailMoviePresenter
+import com.example.kotlin_assignment_fifteen.utils.EXTRA_MOVIES
+import com.example.kotlin_assignment_fifteen.utils.showToast
 
-class DetailMovieActivity : AppCompatActivity() {
+class DetailMovieActivity : AppCompatActivity(), DetailMovieView {
 
     private lateinit var binding: ActivityDetailMovieBinding
+    private lateinit var detailMoviePresenter: DetailMoviePresenter
+    private lateinit var movies: ResultsItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,47 +26,33 @@ class DetailMovieActivity : AppCompatActivity() {
         supportActionBar?.title = "Detail Movie"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val movies = intent.getParcelableExtra<ResultsItem>(EXTRA_MOVIES) as ResultsItem
-        getDetailMovie(movies.id.toString())
+        movies = intent.getParcelableExtra(EXTRA_MOVIES)!!
+        detailMoviePresenter = DetailMoviePresenter(this, DetailMovieInteractor())
+        detailMoviePresenter.getDataDetailMovie(movies.id.toString())
+
     }
 
-    private fun getDetailMovie(idMovie: String) {
-        NetworkConfig().getService().getDetailMovie(idMovie)
-            .enqueue(object : Callback<DetailMovieResponse> {
-                override fun onResponse(
-                    call: Call<DetailMovieResponse>,
-                    response: Response<DetailMovieResponse>
-                ) {
-                    if(response.isSuccessful) {
-                        binding.apply {
-                            Glide.with(applicationContext)
-                                .load("https://image.tmdb.org/t/p/w500/" + response.body()?.posterPath)
-                                .apply(RequestOptions().override(200, 200))
-                                .into(ivPosterHeader)
-                            Glide.with(applicationContext)
-                                .load("https://image.tmdb.org/t/p/w500/" + response.body()?.posterPath)
-                                .apply(RequestOptions().override(200, 200))
-                                .into(ivPosterDetail)
-                            tvTitleDetail.text = response.body()?.title
-                            tvOverviewDetail.text = response.body()?.overview
-                            tvReleaseDate.text = response.body()?.releaseDate
-                            tvPopularity.text = response.body()?.popularity.toString()
-                            tvRatingDetail.text = response.body()?.voteAverage.toString()
-                            rbMovieDetail.rating = response.body()?.voteAverage!!.toFloat()
-                            tvJumlahUsers.text = response.body()?.voteCount.toString()
-                        }
-                    } else {
-                        Log.d("TAG ERROR", response.errorBody().toString())
-                    }
-                }
-
-                override fun onFailure(call: Call<DetailMovieResponse>, t: Throwable) {
-                    Log.d("TAG", t.localizedMessage)
-                }
-            })
+    override fun setDetailMovie(dataMovie: DetailMovieResponse) {
+        binding.apply {
+            Glide.with(applicationContext)
+                .load("https://image.tmdb.org/t/p/w500/" + dataMovie.posterPath)
+                .apply(RequestOptions().override(200, 200))
+                .into(ivPosterHeader)
+            Glide.with(applicationContext)
+                .load("https://image.tmdb.org/t/p/w500/" + dataMovie.posterPath)
+                .apply(RequestOptions().override(200, 200))
+                .into(ivPosterDetail)
+            tvTitleDetail.text = dataMovie.title
+            tvOverviewDetail.text = dataMovie.overview
+            tvReleaseDate.text = dataMovie.releaseDate
+            tvPopularity.text = dataMovie.popularity.toString()
+            tvRatingDetail.text = dataMovie.voteAverage.toString()
+            rbMovieDetail.rating = dataMovie.voteAverage!!.toFloat()
+            tvJumlahUsers.text = dataMovie.voteCount.toString()
+        }
     }
 
-    companion object {
-        const val EXTRA_MOVIES = "extra_movies"
+    override fun getDataFailed(strError: String) {
+        showToast(this, strError, Toast.LENGTH_SHORT)
     }
 }
