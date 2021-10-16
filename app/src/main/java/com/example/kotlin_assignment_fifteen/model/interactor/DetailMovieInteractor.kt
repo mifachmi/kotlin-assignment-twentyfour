@@ -28,6 +28,7 @@ class DetailMovieInteractor {
 
                 override fun onFailure(call: Call<DetailMovieResponse>, t: Throwable) {
                     onFinishedListenerDetailMovie.onResultFail("Failed To Get Data")
+
                 }
             })
     }
